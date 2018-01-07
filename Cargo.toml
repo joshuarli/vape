@@ -11,4 +11,7 @@ readme = "README.md"
 keywords = ["aesthetic", "vaporwave", "fullwidth"]
 categories = ["command-line-utilities"]
 
+[badges]
+travis-ci = { repository = "JoshuaRLi/vape" }
+
 [dependencies]
