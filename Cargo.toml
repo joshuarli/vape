@@ -16,6 +16,7 @@ travis-ci = { repository = "JoshuaRLi/vape" }
 
 [dependencies]
 getopts = "0.2.15"
+rand = "0.4"
 
 [[bin]]
 name = "vape"
