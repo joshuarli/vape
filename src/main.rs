@@ -49,6 +49,9 @@ fn main() {
     }
 
     if num_kata > 0 {
+        if input.ends_with('\n') {
+            input.pop(); // we want to insert the kana before the newline, if it exists
+        }
         let mut rng = thread_rng();
         while num_kata > 0 {
             let n: u32 = rng.gen_range(KANA_LO, KANA_HI + 1);
