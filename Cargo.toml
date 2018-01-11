@@ -15,10 +15,7 @@ categories = ["command-line-utilities"]
 travis-ci = { repository = "JoshuaRLi/vape" }
 
 [dependencies]
-
-[lib]
-name = "libvape"
-path = "src/lib.rs"
+getopts = "0.2.15"
 
 [[bin]]
 name = "vape"
