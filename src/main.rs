@@ -13,6 +13,15 @@ fn print_usage(program: &str, opts: Options) {
     print!("{}", opts.usage(&usage));
 }
 
+fn to_fw(c: char) -> Option<char> {
+    let c = c as u32;
+    match c {
+        0x0020 => Some(char::from_u32(0x3000).unwrap()),
+        0x0021...0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
+        _ => None,
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
@@ -48,9 +57,13 @@ fn main() {
         }
     }
 
+    let mut output: String = input.chars()
+        .map(|c| to_fw(c).unwrap_or(c))
+        .collect();
+
     if num_kata > 0 {
-        if input.ends_with('\n') {
-            input.pop(); // we want to insert the kana before the newline, if it exists
+        if output.ends_with('\n') {
+            output.pop(); // insert the kana before the newline, if it exists
         }
         let mut rng = thread_rng();
         while num_kata > 0 {
@@ -59,12 +72,12 @@ fn main() {
                 Some(x) => x,
                 None => '\0', // lol
             };
-            input.push(c);
+            output.push(c);
             num_kata -= 1;
         }
     }
 
-    println!("{}", input);
+    println!("{}", output);
     return;
 }
 
