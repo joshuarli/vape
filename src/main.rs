@@ -84,8 +84,23 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    use to_fw;
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn test_supported_fw() {
+        let orig = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~";
+        let fw = "　０１２３４５６７８９ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ！＂＃＄％＆（）＊＋，－．／：；＜＝＞？＠［＼］＾＿｀｛｜｝～";
+        let orig_fw: String = orig.chars()
+            .map(|c| to_fw(c).unwrap_or(c))
+            .collect();
+        assert_eq!(orig_fw, fw);
+    }
+    #[test]
+    fn test_no_fw() {
+        let orig = "😍😍😍🙏🙏🙏🍆🍆🍆";
+        let fw = "😍😍😍🙏🙏🙏🍆🍆🍆";
+        let orig_fw: String = orig.chars()
+            .map(|c| to_fw(c).unwrap_or(c))
+            .collect();
+        assert_eq!(orig_fw, fw);
     }
 }
