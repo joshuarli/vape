@@ -10,7 +10,7 @@ const KANA_HI: u32 = 0x30FF;
 
 fn print_usage(program: &str, opts: Options) {
     let usage = format!("Usage: {} [OPTIONS]", program);
-    print!("{}", opts.usage(&usage));
+    println!("{}", opts.usage(&usage));
 }
 
 fn to_fw(c: char) -> Option<char> {
@@ -68,12 +68,9 @@ fn main() {
         output.push(char::from_u32(0x3000).unwrap()); // add a fw space to make kana look better
         let mut rng = thread_rng();
         while num_kata > 0 {
-            let n: u32 = rng.gen_range(KANA_LO, KANA_HI + 1);
-            let c = match char::from_u32(n) {
-                Some(x) => x,
-                None => '\0', // lol
-            };
-            output.push(c);
+            output.push(char::from_u32(
+                rng.gen_range(KANA_LO, KANA_HI + 1)).unwrap()
+            );
             num_kata -= 1;
         }
     }
