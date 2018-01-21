@@ -25,7 +25,6 @@ fn to_fw(c: char) -> Option<char> {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
     let mut opts = Options::new();
 
     opts.optflag("h", "help", "print this help menu");
@@ -37,7 +36,7 @@ fn main() {
     };
 
     if matches.opt_present("h") {
-        print_usage(&program, opts);
+        print_usage(&args[0], opts);
         return;
     }
 
