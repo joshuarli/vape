@@ -6,7 +6,7 @@ use std::io::{self, Read};
 use rand::{thread_rng, Rng};
 use getopts::Options;
 
-const VERSION: &str = "0.1.2";
+const VERSION: &str = "0.1.3";
 const KANA_LO: u32 = 0x30A0;
 const KANA_HI: u32 = 0x30FF;
 
