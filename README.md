@@ -26,12 +26,6 @@ $ printf 'born to die\n' | vape -k 5
 
 `cargo install vape`
 
-Alternatively, `vape` is available on the AUR as [`vape`](https://aur.archlinux.org/packages/vape).
+Alternatively, direct binary downloads for a variety of 64-bit platforms can be found on the [releases](https://github.com/JoshuaRLi/vape/releases) page.
 
-
-### ａｃｈｉｅｖｅ　ａｅｓｔｈｅｔｉｃｓ　ａｔ　ｈｇｉｈ　ｓｐｅｅｄ
-
-```sh
-$ cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 100000000 | time vape > /dev/null
-vape > /dev/null 2>&1  1.30s user 0.22s system 28% cpu 5.259 total
-```
+`vape` is also available on the AUR as [`vape`](https://aur.archlinux.org/packages/vape)!
