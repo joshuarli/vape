@@ -57,22 +57,19 @@ fn main() {
 
     let kata_opt = matches.opt_str("k");
     let mut num_kata: u8 = match kata_opt {
-        Some(x) => {
-            let k = match x.parse::<u8>() {
-                Ok(p) => p,
-                Err(_) => {
-                    eprintln!("Option -k, --kana must be an integer from 0 to 255.");
-                    process::exit(1);
-                }
-            };
-            k
-        }
         None => 0,
+        Some(x) => match x.parse::<u8>() {
+            Ok(p) => p,
+            Err(_) => {
+                eprintln!("Option -k, --kana must be an integer from 0 to 255.");
+                process::exit(1);
+            }
+        },
     };
 
     let mut input = String::new();
     match io::stdin().read_to_string(&mut input) {
-        Ok(_) => {},
+        Ok(_) => {}
         Err(e) => {
             eprintln!("Error: {}", e);
             process::exit(1);
