@@ -71,9 +71,13 @@ fn main() {
     };
 
     let mut input = String::new();
-    io::stdin()
-        .read_to_string(&mut input)
-        .expect("Invalid UTF-8 codepoint.");
+    match io::stdin().read_to_string(&mut input) {
+        Ok(_) => {},
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            process::exit(1);
+        }
+    };
 
     let mut output: String = input.chars().map(|c| to_fw(c).unwrap_or(c)).collect();
 
