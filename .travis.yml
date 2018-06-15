@@ -1,13 +1,40 @@
-sudo: false
+os: linux
+dist: trusty
+sudo: required
 language: rust
-rust:
-  - stable
-  - beta
-  - nightly
+rust: stable
 
-matrix:
-  allow_failures:
-    - rust: nightly
+env:
+  global:
+    - NAME=vape
+
+before_install:
+  - case "$TARGET" in
+      x86_64-unknown-linux-gnu)    ;;
+      *) rustup target add $TARGET ;;
+    esac
 
 script:
   - cargo test --verbose
+  - cargo build --release --target "$TARGET" --verbose
+  - strip --strip-all "target/${TARGET}/release/${NAME}"
+  - mv -v "target/${TARGET}/release/${NAME}" "${NAME}-${TARGET}"
+
+matrix:
+  include:
+    - env: TARGET=x86_64-unknown-linux-gnu
+    - env: TARGET=x86_64-unknown-linux-musl
+
+deploy:
+  provider: releases
+  api_key:
+    secure: s1TenF5m0j6yBWG3csBzPylAn216PX4IJW7wZrNUuOSpf2vqIPnTo0Z3Re913aYYlys/5hn/w5/f0GCT7Skq3deq1K/waDHDQpcfUIxEuIxkNJUOSm7IDkCBO1Ffsh1gg7G8ZXqZTmno2VB7bR3BB0C9I2SBR2EEGlIKVZJJ9PM7FYS5UO+7aHHJDSXYgeVxfDODkndABxQMvThC/P3Zwh03uwmGVtmtvPtgfHy5up38yig2rJXVk38hrmselmieEYqwMOIbkyJO2+01475wPH7xwFTqGPPRWOt4pPB/GcAKwTWmF8mxDJJ6Inamj7R1cdxtTJTyQbz2xcBj+IYWE6eF6yH1bIU2mMsnXmbTjDNph/P3Qs4CJhZdmsFBkYgPFpM52sJxYGnU8QHT0DRykjvYbkJ8YmG/QmOr8PPUnPa1aIlMLopokj2Y7cwjxrbxEtKwb1eifAyjiuLtOZqyMW9Y1i5TxTpDkRdr+PlrKEXx0Zc3LpjMlpLrrh1P69Fb0Y9tyuq9TkGyKrhEsKvd8mkca2absmtZGUGGbnRHkpWcYN53SvTq64rlBrOLhoGMDvVyznuvOJ4zvZQ0qNcuJ4uiSqbSaMUZj94/gGu9eqmIqcS3+OmtMN3d2NF5HOxlguroa9rTepLHS9BRhi2mhJ9HNcpLDOz4p3xndtLXyac=
+  file_glob: true
+  file: $NAME-*
+  skip_cleanup: true
+  on:
+    tags: true
+
+notifications:
+  email:
+    on_success: never
