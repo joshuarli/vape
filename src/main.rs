@@ -3,7 +3,8 @@ extern crate getopts;
 
 use std::{process, env, char};
 use std::io::{self, Read};
-use rand::{thread_rng, Rng};
+use rand::{FromEntropy,Rng};
+use rand::rngs::SmallRng;
 use getopts::Options;
 
 const VERSION: &str = "0.1.3";
@@ -76,7 +77,7 @@ fn main() {
             output.pop(); // insert the kana before the newline, if it exists
         }
         output.push(char::from_u32(0x3000).unwrap()); // add a fw space to make kana look better
-        let mut rng = thread_rng();
+        let mut rng = SmallRng::from_entropy();
         while num_kata > 0 {
             output.push(char::from_u32(
                 rng.gen_range(KANA_LO, KANA_HI + 1)).unwrap()
