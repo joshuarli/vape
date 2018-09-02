@@ -9,7 +9,7 @@ use getopts::Options;
 const KANA_LO: u32 = 0x30A0;
 const KANA_HI: u32 = 0x30FF;
 
-fn print_usage(program: &str, opts: Options) {
+fn print_usage(program: &str, opts: &Options) {
     let usage = format!("Usage: {} [OPTIONS]", program);
     println!("{}", opts.usage(&usage));
 }
@@ -26,7 +26,6 @@ fn to_fw(c: char) -> Option<char> {
 fn main() {
     let args: Vec<String> = env::args().collect();
     let mut opts = Options::new();
-
     opts.optflag("h", "help", "print this help menu");
     opts.optopt("k", "kana", "append N random katakana characters, up to 255", "N");
 
@@ -36,7 +35,7 @@ fn main() {
     };
 
     if matches.opt_present("h") {
-        print_usage(&args[0], opts);
+        print_usage(&args[0], &opts);
         return;
     }
 
