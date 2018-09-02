@@ -81,7 +81,6 @@ fn main() {
     }
 
     println!("{}", output);
-    return;
 }
 
 #[cfg(test)]
