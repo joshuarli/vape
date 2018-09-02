@@ -23,4 +23,9 @@ name = "vape"
 path = "src/main.rs"
 
 [profile.release]
+panic = "abort"
 lto = true
+codegen-units = 1
+incremental = false
+# default for release: opt-level = "3"
+# levels s and z are nightly-only
