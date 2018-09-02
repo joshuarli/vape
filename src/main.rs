@@ -31,6 +31,12 @@ fn main() {
         return;
     }
 
+    let kata_opt = matches.opt_str("k");
+    let mut num_kata: u8 = match kata_opt {
+        Some(x) => { x.parse().unwrap() }
+        None => { 0 }
+    };
+
     let mut input = String::new();
     loop {
         let bytes_read = match io::stdin().read_line(&mut input) {
@@ -41,15 +47,7 @@ fn main() {
             break;  // indicates EOF
         }
     }
-    print!("{}", input);
 
-    let kata_opt = matches.opt_str("k");
-    let mut num_kata: u8 = match kata_opt {
-        Some(x) => { x.parse().unwrap() }
-        None => { 0 }
-    };
-    
-    // TODO append to final output string instead of printing char by char
     if num_kata > 0 {
         let mut rng = thread_rng();
         while num_kata > 0 {
@@ -58,11 +56,12 @@ fn main() {
                 Some(x) => x,
                 None => '\0', // lol
             };
-            print!("{}", c);
+            input.push(c);
             num_kata -= 1;
         }
     }
 
+    println!("{}", input);
     return;
 }
 
