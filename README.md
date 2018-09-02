@@ -18,14 +18,14 @@ $ printf 'the longer you live, the more ad revenue you generate\n' | vape
 You can also append up to 255 random fullwidth katakana:
 
 ```sh
-$ printf 'born to die\n' | vape -k 5
-ｂｏｒｎ　ｔｏ　ｄｉｅ　リマヾソル
+$ printf 'cool, and nice\n' | vape -k 5
+ｃｏｏｌ，　ａｎｄ　ｎｉｃｅ　リマヾソル
 ```
 
 ## Installation
 
 `cargo install vape`
 
-Alternatively, direct binary downloads for a variety of 64-bit platforms can be found on the [releases](https://github.com/JoshuaRLi/vape/releases) page.
+Alternatively, direct binary downloads for a variety of platforms can be found on the [releases](https://github.com/JoshuaRLi/vape/releases) page.
 
 `vape` is also available on the AUR as [`vape`](https://aur.archlinux.org/packages/vape)!
