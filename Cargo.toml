@@ -9,7 +9,7 @@ homepage = "https://www.github.com/JoshuaRLi/vape"
 repository = "https://www.github.com/JoshuaRLi/vape"
 readme = "README.md"
 keywords = ["aesthetic", "vaporwave", "fullwidth"]
-categories = ["command-line-utilities"]
+categories = ["command-line-utilities", "text-processing"]
 
 [badges]
 travis-ci = { repository = "JoshuaRLi/vape" }
