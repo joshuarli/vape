@@ -6,6 +6,7 @@ use std::io::{self, Read};
 use rand::{thread_rng, Rng};
 use getopts::Options;
 
+const VERSION: &str = "0.1.2";
 const KANA_LO: u32 = 0x30A0;
 const KANA_HI: u32 = 0x30FF;
 
@@ -27,6 +28,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let mut opts = Options::new();
     opts.optflag("h", "help", "print this help menu");
+    opts.optflag("v", "version", "print the version");
     opts.optopt("k", "kana", "append N random katakana characters, up to 255", "N");
 
     let matches = match opts.parse(&args[1..]) {
@@ -39,6 +41,11 @@ fn main() {
 
     if matches.opt_present("h") {
         print_usage(&args[0], &opts);
+        return;
+    }
+
+    if matches.opt_present("v") {
+        println!("Version: {}", &VERSION);
         return;
     }
 
