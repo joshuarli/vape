@@ -28,4 +28,4 @@ $ printf 'cool, and nice\n' | vape -k 5
 
 Alternatively, direct binary downloads for a variety of platforms can be found on the [releases](https://github.com/JoshuaRLi/vape/releases) page.
 
-`vape` is also available on the AUR as [`vape`](https://aur.archlinux.org/packages/vape)!
+`vape` is also available on the AUR as [`vape`](https://aur.archlinux.org/packages/vape) and [`vape-bin`](https://aur.archlinux.org/packages/vape-bin)!
