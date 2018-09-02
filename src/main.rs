@@ -1,9 +1,9 @@
-extern crate rand;
 extern crate getopts;
+extern crate rand;
 
-use std::{process, env, char};
+use std::{char, env, process};
 use std::io::{self, Read};
-use rand::{FromEntropy,Rng};
+use rand::{FromEntropy, Rng};
 use rand::rngs::SmallRng;
 use getopts::Options;
 
@@ -30,7 +30,12 @@ fn main() {
     let mut opts = Options::new();
     opts.optflag("h", "help", "print this help menu");
     opts.optflag("v", "version", "print the version");
-    opts.optopt("k", "kana", "append N random katakana characters, up to 255", "N");
+    opts.optopt(
+        "k",
+        "kana",
+        "append N random katakana characters, up to 255",
+        "N",
+    );
 
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
@@ -56,21 +61,21 @@ fn main() {
             let k = match x.parse::<u8>() {
                 Ok(p) => p,
                 Err(_) => {
-                    eprintln!("Option k/kana must be an integer from 0 to 255.");
+                    eprintln!("Option -k, --kana must be an integer from 0 to 255.");
                     process::exit(1);
                 }
             };
             k
         }
-        None => { 0 }
+        None => 0,
     };
 
     let mut input = String::new();
-    io::stdin().read_to_string(&mut input).expect("Invalid UTF-8 codepoint.");
+    io::stdin()
+        .read_to_string(&mut input)
+        .expect("Invalid UTF-8 codepoint.");
 
-    let mut output: String = input.chars()
-        .map(|c| to_fw(c).unwrap_or(c))
-        .collect();
+    let mut output: String = input.chars().map(|c| to_fw(c).unwrap_or(c)).collect();
 
     if num_kata > 0 {
         // if a trailing newline exists (e.g. echo stdout is piped to vape)
@@ -83,7 +88,7 @@ fn main() {
         output.push(char::from_u32(0x3000).unwrap());
         let mut rng = SmallRng::from_entropy();
         while num_kata > 0 {
-            output.push(char::from_u32(rng.gen_range(KANA_LO, KANA_HI+1)).unwrap());
+            output.push(char::from_u32(rng.gen_range(KANA_LO, KANA_HI + 1)).unwrap());
             num_kata -= 1;
         }
         if reserve_trailing_newline {
@@ -99,20 +104,19 @@ mod tests {
     use to_fw;
     #[test]
     fn test_supported_fw() {
-        let orig = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~";
-        let fw = "　０１２３４５６７８９ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ！＂＃＄％＆（）＊＋，－．／：；＜＝＞？＠［＼］＾＿｀｛｜｝～";
-        let orig_fw: String = orig.chars()
-            .map(|c| to_fw(c).unwrap_or(c))
-            .collect();
+        let orig = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+                    !\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~";
+        let fw = "　０１２３４５６７８９ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ\
+            ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ\
+            ！＂＃＄％＆（）＊＋，－．／：；＜＝＞？＠［＼］＾＿｀｛｜｝～";
+        let orig_fw: String = orig.chars().map(|c| to_fw(c).unwrap_or(c)).collect();
         assert_eq!(orig_fw, fw);
     }
     #[test]
     fn test_no_fw() {
         let orig = "😍😍😍🙏🙏🙏🍆🍆🍆";
         let fw = "😍😍😍🙏🙏🙏🍆🍆🍆";
-        let orig_fw: String = orig.chars()
-            .map(|c| to_fw(c).unwrap_or(c))
-            .collect();
+        let orig_fw: String = orig.chars().map(|c| to_fw(c).unwrap_or(c)).collect();
         assert_eq!(orig_fw, fw);
     }
 }
