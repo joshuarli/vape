@@ -73,20 +73,25 @@ fn main() {
         .collect();
 
     if num_kata > 0 {
-        if output.ends_with('\n') {
-            output.pop(); // insert the kana before the newline, if it exists
+        // if a trailing newline exists (e.g. echo stdout is piped to vape)
+        // then we want to insert the kana before it.
+        let reserve_trailing_newline = output.ends_with('\n');
+        if reserve_trailing_newline {
+            output.pop();
         }
-        output.push(char::from_u32(0x3000).unwrap()); // add a fw space to make kana look better
+        // in any case, add a fw space to make appended kana look better
+        output.push(char::from_u32(0x3000).unwrap());
         let mut rng = SmallRng::from_entropy();
         while num_kata > 0 {
-            output.push(char::from_u32(
-                rng.gen_range(KANA_LO, KANA_HI + 1)).unwrap()
-            );
+            output.push(char::from_u32(rng.gen_range(KANA_LO, KANA_HI+1)).unwrap());
             num_kata -= 1;
+        }
+        if reserve_trailing_newline {
+            output.push('\n');
         }
     }
 
-    println!("{}", output);
+    print!("{}", output);
 }
 
 #[cfg(test)]
