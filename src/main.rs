@@ -65,6 +65,7 @@ fn main() {
         if output.ends_with('\n') {
             output.pop(); // insert the kana before the newline, if it exists
         }
+        output.push(char::from_u32(0x3000).unwrap()); // add a fw space to make kana look better
         let mut rng = thread_rng();
         while num_kata > 0 {
             let n: u32 = rng.gen_range(KANA_LO, KANA_HI + 1);
