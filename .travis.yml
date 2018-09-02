@@ -21,7 +21,7 @@ before_install:
         brew update ;
         brew install upx ;;
       *) ;;
-  esac
+    esac
 
 script:
   - cargo test --verbose
