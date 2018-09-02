@@ -1,3 +1,7 @@
+extern crate libvape;
+
+use libvape::vaporize;
+
 fn main() {
     println!("Hello, world!");
 }
