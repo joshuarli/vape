@@ -5,7 +5,19 @@
 
 `vape` is a command-line tool that converts text into "vaporwave" text - fullwidth UTF-8 characters.
 
+More technically, characters in the range `U+0021` to `U+007E` are translated forward by `0xFEE0`, and the space character `U+0020` is converted to the ideographic (fullwidth) space `U+3000`.
+
 
 ## Usage
 
-TODO
+```sh
+$ printf 'the longer you live, the more ad revenue you generate\n' | vape
+ｔｈｅ　ｌｏｎｇｅｒ　ｙｏｕ　ｌｉｖｅ，　ｔｈｅ　ｍｏｒｅ　ａｄ　ｒｅｖｅｎｕｅ　ｙｏｕ　ｇｅｎｅｒａｔｅ
+```
+
+You can also append up to 255 random fullwidth katakana:
+
+```sh
+$ printf 'born to die\n' | vape -k 5
+ｂｏｒｎ　ｔｏ　ｄｉｅ　リマヾソル
+```
