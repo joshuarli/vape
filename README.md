@@ -21,3 +21,11 @@ You can also append up to 255 random fullwidth katakana:
 $ printf 'born to die\n' | vape -k 5
 ｂｏｒｎ　ｔｏ　ｄｉｅ　リマヾソル
 ```
+
+
+## ａｃｈｉｅｖｅ　ａｅｓｔｈｅｔｉｃｓ　ａｔ　ｈｇｉｈ　ｓｐｅｅｄ
+
+```sh
+$ cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 100000000 | time vape > /dev/null 2>&1     
+vape > /dev/null 2>&1  1.30s user 0.22s system 28% cpu 5.259 total
+```
