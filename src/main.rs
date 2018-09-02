@@ -1,7 +1,8 @@
 extern crate rand;
 extern crate getopts;
 
-use std::{env, io, char};
+use std::{env, char};
+use std::io::{self, Read};
 use rand::{thread_rng, Rng};
 use getopts::Options;
 
@@ -47,15 +48,9 @@ fn main() {
     };
 
     let mut input = String::new();
-    loop {
-        let bytes_read = match io::stdin().read_line(&mut input) {
-            Ok(n) => n,
-            Err(e) => panic!(e.to_string()),
-        };
-        if bytes_read == 0 {
-            break;  // indicates EOF
-        }
-    }
+    let stdin = io::stdin();
+    let mut stdin_lock = stdin.lock();
+    stdin_lock.read_to_string(&mut input).expect("Invalid UTF-8 codepoint.");
 
     let mut output: String = input.chars()
         .map(|c| to_fw(c).unwrap_or(c))
