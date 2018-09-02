@@ -10,20 +10,50 @@ env:
 
 before_install:
   - case "$TARGET" in
-      x86_64-unknown-linux-gnu)    ;;
+      x86_64-unknown-linux-gnu|x86_64-apple-darwin) ;;
       *) rustup target add $TARGET ;;
     esac
+  - case "$TRAVIS_OS_NAME" in
+      "linux")
+        wget -q -O - https://github.com/upx/upx/releases/download/v3.94/upx-3.94-amd64_linux.tar.xz | unxz | tar xf - ;
+        sudo install -m755 upx-3.94-amd64_linux/upx /usr/local/bin ;;
+      "osx")
+        brew update ;
+        brew install upx ;;
+      *) ;;
+  esac
 
 script:
   - cargo test --verbose
   - cargo build --release --target "$TARGET" --verbose
-  - strip --strip-all "target/${TARGET}/release/${NAME}"
+  - case "$TRAVIS_OS_NAME" in
+      "linux")
+        strip --strip-all "target/${TARGET}/release/${NAME}" ;;
+      "osx")
+        strip "target/${TARGET}/release/${NAME}" ;;
+      *) ;;
+    esac
+  - upx --ultra-brute "target/${TARGET}/release/${NAME}"
   - mv -v "target/${TARGET}/release/${NAME}" "${NAME}-${TARGET}"
 
 matrix:
   include:
     - env: TARGET=x86_64-unknown-linux-gnu
     - env: TARGET=x86_64-unknown-linux-musl
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      osx_image: xcode9.3
+  #  - env: TARGET=x86_64-unknown-freebsd
+  #  - env: TARGET=x86_64-unknown-netbsd
+  #  - env: TARGET=mips-unknown-linux-gnu
+  #  - env: TARGET=mips64-unknown-linux-gnuabi64
+  #  - env: TARGET=powerpc64-unknown-linux-gnu
+  #  - env: TARGET=aarch64-linux-android
+  #  - env: TARGET=arm-linux-androideabi
+  #  - env: TARGET=armv7-linux-androideabi
+  #  - env: TARGET=aarch64-unknown-linux-gnu
+  #  - env: TARGET=arm-unknown-linux-gnueabi
+  #  - env: TARGET=armv7-unknown-linux-gnueabihf
 
 deploy:
   provider: releases
