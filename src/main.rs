@@ -34,7 +34,7 @@ fn main() {
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(e) => {
-            eprintln!("{}\nTo print usage, try `{} -h`", e, &args[0]);
+            eprintln!("{}\nFor usage, try `{} -h`", e, &args[0]);
             process::exit(1);
         }
     };
@@ -45,7 +45,7 @@ fn main() {
     }
 
     if matches.opt_present("v") {
-        println!("Version: {}", &VERSION);
+        println!("{} {}", &args[0], &VERSION);
         return;
     }
 
