@@ -7,7 +7,7 @@ use rand::{FromEntropy, Rng};
 use rand::rngs::SmallRng;
 use getopts::Options;
 
-const VERSION: &str = "0.2.1";
+const VERSION: &str = "0.2.2";
 const KANA_LO: u32 = 0x30A0;
 const KANA_HI: u32 = 0x30FF;
 
