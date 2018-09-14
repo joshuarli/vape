@@ -2,7 +2,7 @@
 name = "vape"
 description = "ｆｕｌｌ ｗｉｄｔｈ ａｅｓｔｈｅｔｉｃｓ"
 version = "0.2.1"
-authors = ["Joshua Li <joshua.r.li.98@gmail.com>"]
+authors = ["Joshua Li <josh@jrl.ninja>"]
 license = "MIT"
 
 homepage = "https://www.github.com/JoshuaRLi/vape"
@@ -15,8 +15,8 @@ categories = ["command-line-utilities", "text-processing"]
 travis-ci = { repository = "JoshuaRLi/vape" }
 
 [dependencies]
-getopts = "^0.2"
-rand = "~0.5.0"
+getopts = "~0.2"
+rand = "~0.5"
 
 [[bin]]
 name = "vape"

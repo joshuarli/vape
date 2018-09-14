@@ -7,6 +7,7 @@ rust: stable
 env:
   global:
     - NAME=vape
+    - UPX_VER=3.95
 
 before_install:
   - case "$TARGET" in
@@ -15,8 +16,8 @@ before_install:
     esac
   - case "$TRAVIS_OS_NAME" in
       "linux")
-        wget -q -O - https://github.com/upx/upx/releases/download/v3.94/upx-3.94-amd64_linux.tar.xz | unxz | tar xf - ;
-        sudo install -m755 upx-3.94-amd64_linux/upx /usr/local/bin ;;
+        wget -qO - "https://github.com/upx/upx/releases/download/v${UPX_VER}/upx-${UPX_VER}-amd64_linux.tar.xz" | unxz | tar xf - ;
+        sudo install -m755 "upx-${UPX_VER}-amd64_linux/upx" /usr/local/bin ;;
       "osx")
         brew update ;
         brew install upx ;;
@@ -33,7 +34,7 @@ script:
         strip "target/${TARGET}/release/${NAME}" ;;
       *) ;;
     esac
-  - upx --ultra-brute "target/${TARGET}/release/${NAME}"
+  - upx --ultra-brute --best "target/${TARGET}/release/${NAME}"
   - mv -v "target/${TARGET}/release/${NAME}" "${NAME}-${TARGET}"
 
 matrix:
