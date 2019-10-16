@@ -20,7 +20,7 @@ fn to_fw(c: char) -> Option<char> {
     let c = c as u32;
     match c {
         0x0020 => Some(char::from_u32(0x3000).unwrap()),
-        0x0021...0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
+        0x0021..=0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
         _ => None,
     }
 }
