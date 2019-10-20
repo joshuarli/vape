@@ -3,7 +3,7 @@ extern crate rand;
 
 use std::{char, env, process};
 use std::io::{self, Read};
-use rand::{FromEntropy, Rng};
+use rand::{Rng, SeedableRng};
 use rand::rngs::SmallRng;
 use getopts::Options;
 
