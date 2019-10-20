@@ -2,16 +2,24 @@ dist: xenial
 language: rust
 rust: stable
 
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+.*$/
+
 env:
   global:
     - NAME=vape
-    - UPX_VER=3.95  # linux upx only
+    # linux upx only
+    - UPX_VER=3.95
 
 before_install:
+  # add targets not present by default in travis's rustup
   - case "$TARGET" in
       x86_64-unknown-linux-gnu|x86_64-apple-darwin) ;;
       *) rustup target add $TARGET ;;
     esac
+  # install upx
   - case "$TRAVIS_OS_NAME" in
       "linux")
         wget -qO - "https://github.com/upx/upx/releases/download/v${UPX_VER}/upx-${UPX_VER}-amd64_linux.tar.xz" | unxz | tar xf - ;
@@ -22,9 +30,15 @@ before_install:
       *) ;;
     esac
 
+install:
+  - cargo build
+
 script:
   - cargo test --verbose
-  - cargo build --release --target "$TARGET" --verbose  # static builds
+
+after_success:
+  # static builds
+  - cargo build --release --target "$TARGET" --verbose
   - case "$TRAVIS_OS_NAME" in
       "linux")
         strip --strip-all "target/${TARGET}/release/${NAME}" ;;
@@ -46,7 +60,7 @@ matrix:
 deploy:
   provider: releases
   api_key:
-    secure: s1TenF5m0j6yBWG3csBzPylAn216PX4IJW7wZrNUuOSpf2vqIPnTo0Z3Re913aYYlys/5hn/w5/f0GCT7Skq3deq1K/waDHDQpcfUIxEuIxkNJUOSm7IDkCBO1Ffsh1gg7G8ZXqZTmno2VB7bR3BB0C9I2SBR2EEGlIKVZJJ9PM7FYS5UO+7aHHJDSXYgeVxfDODkndABxQMvThC/P3Zwh03uwmGVtmtvPtgfHy5up38yig2rJXVk38hrmselmieEYqwMOIbkyJO2+01475wPH7xwFTqGPPRWOt4pPB/GcAKwTWmF8mxDJJ6Inamj7R1cdxtTJTyQbz2xcBj+IYWE6eF6yH1bIU2mMsnXmbTjDNph/P3Qs4CJhZdmsFBkYgPFpM52sJxYGnU8QHT0DRykjvYbkJ8YmG/QmOr8PPUnPa1aIlMLopokj2Y7cwjxrbxEtKwb1eifAyjiuLtOZqyMW9Y1i5TxTpDkRdr+PlrKEXx0Zc3LpjMlpLrrh1P69Fb0Y9tyuq9TkGyKrhEsKvd8mkca2absmtZGUGGbnRHkpWcYN53SvTq64rlBrOLhoGMDvVyznuvOJ4zvZQ0qNcuJ4uiSqbSaMUZj94/gGu9eqmIqcS3+OmtMN3d2NF5HOxlguroa9rTepLHS9BRhi2mhJ9HNcpLDOz4p3xndtLXyac=
+    secure: "MQvkAqJpB84CO9DW7h7OIcZh4lSev5BG9InszQ2Em1bFvd56hLTGUchgoanxHJIoZ2ULDqRhAlubQsaWg57cKrCRO7qsYtvzkbKOU5PkWAFZcgbZ8KUv/fXUf3nHmziilsnMnMjcXquU40v8zALbwwPK0JCFlY0Ozs4JdS5kYtXt88J370XjS3+jzh+bDYBTNZHtisCYM0Q55SFeG8MrBwcfe1SI1ap6TSk+gWbNtfLLYT5y7g07L06DWKiA9GRJ8m56Hf+Blwgmgkc91EMXXMghqyoswdOyyhTzFePJG3qHwEhM8aLH3/5BsCgZ7fycMqpQ+7kwoIdntYUhJMd7KME+f4j2WffOL525SEqeTmwlRtTO19cRJmXHX4Ttv9vj+SqhgsaouCgFRVe0mngSKE4YiUrQAXkgyd9OYafnl9J9Zs8Oh42vMN9UIWFpL4bL9OQGUPHAbSsMZPAXvrjRdorjBpvCn8jDQyGvzy/w+aQwYNiB+rfTfOszoyhdBSou5mOZsBUrd0vWDuMwcKnJo9msnd1Fef/uyi3owbYExC1Xpf3iFyAqoNRg0bbjChn+n3MgCirESZ16FPpxJ2fBwDqUzCXVrHjHGQadGoQoDlhsYnY2quCauYLZvxl9M5yLOf07BcCqyPOJuhVrPm3R/7bOTlcJh4eLj6XY6lLeznA="
   file_glob: true
   file: $NAME-*
   skip_cleanup: true
