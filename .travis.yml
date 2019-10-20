@@ -1,13 +1,11 @@
-os: linux
-dist: trusty
-sudo: required
+dist: xenial
 language: rust
 rust: stable
 
 env:
   global:
     - NAME=vape
-    - UPX_VER=3.95
+    - UPX_VER=3.95  # linux upx only
 
 before_install:
   - case "$TARGET" in
@@ -26,7 +24,7 @@ before_install:
 
 script:
   - cargo test --verbose
-  - cargo build --release --target "$TARGET" --verbose
+  - cargo build --release --target "$TARGET" --verbose  # static builds
   - case "$TRAVIS_OS_NAME" in
       "linux")
         strip --strip-all "target/${TARGET}/release/${NAME}" ;;
@@ -34,7 +32,7 @@ script:
         strip "target/${TARGET}/release/${NAME}" ;;
       *) ;;
     esac
-  - upx --ultra-brute --best "target/${TARGET}/release/${NAME}"
+  - upx --best "target/${TARGET}/release/${NAME}"
   - mv -v "target/${TARGET}/release/${NAME}" "${NAME}-${TARGET}"
 
 matrix:
@@ -43,18 +41,7 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-musl
     - env: TARGET=x86_64-apple-darwin
       os: osx
-      osx_image: xcode9.3
-  #  - env: TARGET=x86_64-unknown-freebsd
-  #  - env: TARGET=x86_64-unknown-netbsd
-  #  - env: TARGET=mips-unknown-linux-gnu
-  #  - env: TARGET=mips64-unknown-linux-gnuabi64
-  #  - env: TARGET=powerpc64-unknown-linux-gnu
-  #  - env: TARGET=aarch64-linux-android
-  #  - env: TARGET=arm-linux-androideabi
-  #  - env: TARGET=armv7-linux-androideabi
-  #  - env: TARGET=aarch64-unknown-linux-gnu
-  #  - env: TARGET=arm-unknown-linux-gnueabi
-  #  - env: TARGET=armv7-unknown-linux-gnueabihf
+      osx_image: xcode11.2
 
 deploy:
   provider: releases
