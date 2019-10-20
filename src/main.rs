@@ -20,7 +20,7 @@ fn to_fw(c: char) -> Option<char> {
     let c = c as u32;
     match c {
         0x0020 => Some(char::from_u32(0x3000).unwrap()),
-        0x0021...0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
+        0x0021..=0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
         _ => None,
     }
 }
@@ -37,13 +37,10 @@ fn main() {
         "N",
     );
 
-    let matches = match opts.parse(&args[1..]) {
-        Ok(m) => m,
-        Err(e) => {
-            eprintln!("{}\nFor usage, try `{} -h`", e, &args[0]);
-            process::exit(1);
-        }
-    };
+    let matches = opts.parse(&args[1..]).unwrap_or_else(|e| {
+        eprintln!("{}\nFor usage, try `{} -h`", e, &args[0]);
+        process::exit(1);
+    });
 
     if matches.opt_present("h") {
         print_usage(&args[0], &opts);
@@ -55,26 +52,17 @@ fn main() {
         return;
     }
 
-    let kata_opt = matches.opt_str("k");
-    let mut num_kata: u8 = match kata_opt {
-        None => 0,
-        Some(x) => match x.parse::<u8>() {
-            Ok(p) => p,
-            Err(_) => {
-                eprintln!("Option -k, --kana must be an integer from 0 to 255.");
-                process::exit(1);
-            }
-        },
-    };
+    let kata_opt = matches.opt_str("k").unwrap_or("0".to_string());
+    let mut num_kata: u8 = kata_opt.parse::<u8>().unwrap_or_else(|_| {
+        eprintln!("Option -k, --kana must be an integer from 0 to 255.");
+        process::exit(1);
+    });
 
     let mut input = String::new();
-    match io::stdin().read_to_string(&mut input) {
-        Ok(_) => {}
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            process::exit(1);
-        }
-    };
+    io::stdin().read_to_string(&mut input).unwrap_or_else(|e| {
+        eprintln!("Error: {}", e);
+        process::exit(1);
+    });
 
     let mut output: String = input.chars().map(|c| to_fw(c).unwrap_or(c)).collect();
 
