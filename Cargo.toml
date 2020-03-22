@@ -22,9 +22,8 @@ rand = { version = "~0.7", features = ["small_rng"] }
 name = "vape"
 path = "src/main.rs"
 
-# https://doc.rust-lang.org/cargo/reference/manifest.html#the-profile-sections
 [profile.release]
-panic = "abort"  # remove support for stack unwinding for smaller releases
-lto = true
+lto = "fat"
 opt-level = "z"  # smallest build possible
-codegen-units = 1  # disable parallel codegen because it prevents some optimizations
+codegen-units = 1
+panic = "abort"
