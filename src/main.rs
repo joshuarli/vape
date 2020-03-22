@@ -32,7 +32,8 @@ fn rand_kana() -> u32 {
     // on the target platform.
 
     let ptr = Box::into_raw(Box::new(0));
-    let ret = KANA_LO + ((ptr as u32) % 255);
+    // KANA_HI is 0x30FF. 0x30FF - 0x30A0 = 95.
+    let ret = KANA_LO + ((ptr as u32) % 95);
 
     // Tell rust that it can clean up this Box.
     // XXX: actually, if we do this, rust will tend to allocate the same memory
