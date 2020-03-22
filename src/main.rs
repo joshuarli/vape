@@ -4,7 +4,7 @@ use getopts::Options;
 use std::io::{self, Read};
 use std::{char, env, process};
 
-const VERSION: &str = "0.2.3";
+const VERSION: &str = "0.3.0";
 const KANA_LO: u32 = 0x30A0;
 
 fn print_usage(program: &str, opts: &Options) {
