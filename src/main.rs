@@ -69,7 +69,7 @@ fn main() {
         return;
     }
 
-    let kata_opt = matches.opt_str("k").unwrap_or("0".to_string());
+    let kata_opt = matches.opt_str("k").unwrap_or_else(|| "0".to_string());
     let mut num_kata: u8 = kata_opt.parse::<u8>().unwrap_or_else(|_| {
         eprintln!("Option -k, --kana must be an integer from 0 to 255.");
         process::exit(1);
