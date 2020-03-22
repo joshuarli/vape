@@ -1,8 +1,8 @@
 extern crate getopts;
 
-use std::{char, env, process};
-use std::io::{self, Read};
 use getopts::Options;
+use std::io::{self, Read};
+use std::{char, env, process};
 
 const VERSION: &str = "0.2.3";
 const KANA_LO: u32 = 0x30A0;
