@@ -1,15 +1,11 @@
 extern crate getopts;
-extern crate rand;
 
 use std::{char, env, process};
 use std::io::{self, Read};
-use rand::{Rng, SeedableRng};
-use rand::rngs::SmallRng;
 use getopts::Options;
 
 const VERSION: &str = "0.2.3";
 const KANA_LO: u32 = 0x30A0;
-const KANA_HI: u32 = 0x30FF;
 
 fn print_usage(program: &str, opts: &Options) {
     let usage = format!("Usage: {} [OPTIONS]", program);
@@ -23,6 +19,27 @@ fn to_fw(c: char) -> Option<char> {
         0x0021..=0x007e => Some(char::from_u32(c + 0xfee0).unwrap()),
         _ => None,
     }
+}
+
+fn rand_kana() -> u32 {
+    // The rand crate is really big for our use case; we only need shitty PRNG.
+    // One very minimal way to do this is to leverage the random nature
+    // of heap allocations.
+
+    // into_raw states that the pointer will be properly aligned, and not null.
+    // Therefore, the main caveat with this approach is you should ONLY modulo
+    // the address with a number that is coprime to either 4 or 8, depending
+    // on the target platform.
+
+    let ptr = Box::into_raw(Box::new(0));
+    let ret = KANA_LO + ((ptr as u32) % 255);
+
+    // Tell rust that it can clean up this Box.
+    // XXX: actually, if we do this, rust will tend to allocate the same memory
+    // address, because this program barely does any heap allocations.
+    // unsafe { Box::from_raw(ptr) };
+
+    ret
 }
 
 fn main() {
@@ -75,9 +92,8 @@ fn main() {
         }
         // in any case, add a fw space to make appended kana look better
         output.push(char::from_u32(0x3000).unwrap());
-        let mut rng = SmallRng::from_entropy();
         while num_kata > 0 {
-            output.push(char::from_u32(rng.gen_range(KANA_LO, KANA_HI + 1)).unwrap());
+            output.push(char::from_u32(rand_kana()).unwrap());
             num_kata -= 1;
         }
         if reserve_trailing_newline {
