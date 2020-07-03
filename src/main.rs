@@ -4,7 +4,7 @@ use getopts::Options;
 use std::io::{self, Read};
 use std::{char, env, process};
 
-const VERSION: &str = "0.3.1";
+const VERSION: &str = "0.4.0";
 
 #[inline]
 fn print_usage(program: &str, opts: &Options) {
