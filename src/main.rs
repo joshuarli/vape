@@ -6,11 +6,13 @@ use std::{char, env, process};
 
 const VERSION: &str = "0.3.1";
 
+#[inline]
 fn print_usage(program: &str, opts: &Options) {
     let usage = format!("Usage: {} [OPTIONS]", program);
     println!("{}", opts.usage(&usage));
 }
 
+#[inline]
 fn to_fw(c: char) -> Option<char> {
     let c = c as u32;
     match c {
@@ -20,6 +22,7 @@ fn to_fw(c: char) -> Option<char> {
     }
 }
 
+#[inline]
 fn rand_kana() -> u32 {
     // Highest kana is 0x30FF. 0x30FF - 0x30A0 (lowest kana) = 95.
     let ret = 0x30A0 + (fastrand::u32(..) % 95);
