@@ -25,8 +25,7 @@ fn to_fw(c: char) -> Option<char> {
 #[inline]
 fn rand_kana() -> u32 {
     // Highest kana is 0x30FF. 0x30FF - 0x30A0 (lowest kana) = 95.
-    let ret = 0x30A0 + (fastrand::u32(..) % 95);
-    ret
+    0x30A0 + (fastrand::u32(..) % 95)
 }
 
 fn main() {
