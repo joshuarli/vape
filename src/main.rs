@@ -5,7 +5,6 @@ use std::io::{self, Read};
 use std::{char, env, process};
 
 const VERSION: &str = "0.3.1";
-const KANA_LO: u32 = 0x30A0;
 
 fn print_usage(program: &str, opts: &Options) {
     let usage = format!("Usage: {} [OPTIONS]", program);
@@ -22,24 +21,8 @@ fn to_fw(c: char) -> Option<char> {
 }
 
 fn rand_kana() -> u32 {
-    // The rand crate is really big for our use case; we only need shitty PRNG.
-    // One very minimal way to do this is to leverage the random nature
-    // of heap allocations.
-
-    // into_raw states that the pointer will be properly aligned, and not null.
-    // Therefore, the main caveat with this approach is you should ONLY modulo
-    // the address with a number that is coprime to either 4 or 8, depending
-    // on the target platform.
-
-    let ptr = Box::into_raw(Box::new(0));
-    // KANA_HI is 0x30FF. 0x30FF - 0x30A0 = 95.
-    let ret = KANA_LO + ((ptr as u32) % 95);
-
-    // Tell rust that it can clean up this Box.
-    // XXX: actually, if we do this, rust will tend to allocate the same memory
-    // address, because this program barely does any heap allocations.
-    // unsafe { Box::from_raw(ptr) };
-
+    // Highest kana is 0x30FF. 0x30FF - 0x30A0 (lowest kana) = 95.
+    let ret = 0x30A0 + (fastrand::u32(..) % 95);
     ret
 }
 
